@@ -5,7 +5,6 @@ import datetime
 from shodan import Shodan
 from github import Github
 
-
 def clean(o):
     ls = []
     keyList = []
@@ -20,7 +19,6 @@ def clean(o):
         for l in ls:
             f.write(l)
 
-
 def check(k, o):
     try:
         shodan_api = Shodan(k)
@@ -28,13 +26,11 @@ def check(k, o):
             print("Key Found!")
             with open(o, 'a+') as f:
                 f.write(k + " Credits: " + str(shodan_api.info()['query_credits']) + " Scans: " + str(shodan_api.info()['scan_credits']) + "\n")
-    except:
-        pass
-
+    except: pass
 
 def search(t, o, k, l):
     tc = 0
-    
+
     while True:
         try:
             api = Github(t)
@@ -71,7 +67,6 @@ def search(t, o, k, l):
                 continue
             break
 
-
 try:
     if len(sys.argv) != 3:
         print("Usage: gitshodankey.py <github-api-token> <keys.out>")
@@ -79,11 +74,14 @@ try:
 
     print("Searching for free Shodan api keys in public Github repositories.\nPlease keep in mind that this will take a few hours!\n")
 
-    keywordFiles = ["keywords/shodan-python.txt"]
+    keywordFiles = ["keywords/shodan-python.txt", "keywords/shodan-javascript.txt", "keywords/shodan-java.txt", "keywords/shodan-csharp.txt"]
     language = None
 
     for keywordFile in keywordFiles:
         if "python" in keywordFile: language = "language:python "
+        elif "javascript" in keywordFile: language = "language:javascript "
+        elif "java" in keywordFile: language = "language:java "
+        elif "csharp" in keywordFile: language = "language:csharp "
 
         keywordList = []
         with open(keywordFile, 'r+') as f:
@@ -105,4 +103,3 @@ try:
 
 except KeyboardInterrupt:
     exit()
-
